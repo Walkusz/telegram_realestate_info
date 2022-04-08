@@ -9,6 +9,8 @@ import os
 import requests
 from docopt import docopt
 
+AWS_ACCESS_KEY_ID = os.environ.get('AWSAccessKeyId')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWSSecretKey')
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 BOT_CHAT_ID = os.environ.get('BOT_CHAT_ID')
 BASE_STRING = 'https://api.telegram.org/bot' + BOT_TOKEN
@@ -25,8 +27,8 @@ def telegram_bot_sendtext(bot_message):
 
 def main():
     dynamodb = boto3.resource('dynamodb',
-                              aws_access_key_id=os.environ.get('AWSAccessKeyId'),
-                              aws_secret_access_key=os.environ.get('AWSSecretKey'),
+                              aws_access_key_id=AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                               region_name=REGION_NAME)
     table = dynamodb.Table(TABLE_NAME)
 
