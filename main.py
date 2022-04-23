@@ -20,7 +20,7 @@ REGION_NAME = 'eu-north-1'
 
 
 def telegram_bot_sendtext(bot_message):
-    send_text = BASE_STRING + '/sendMessage?chat_id=' + BOT_CHAT_ID + '&parse_mode=Markdown&text=' + bot_message
+    send_text = BASE_STRING + '/sendMessage?chat_id=' + BOT_CHAT_ID + '&parse_mode=html&text=' + bot_message
     response = requests.get(send_text)
     return response.json()
 
@@ -35,7 +35,7 @@ def main():
     table_data = table.scan().get('Items', [])
     df = pd.DataFrame(table_data)
     df = df.groupby(by=['city', 'parse_date'])['price'].mean().to_frame()
-    telegram_bot_sendtext(df.to_html())
+    telegram_bot_sendtext(df.to_string())
 
 
 if __name__ == '__main__':
