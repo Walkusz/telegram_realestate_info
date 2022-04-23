@@ -36,7 +36,7 @@ def main():
     df = pd.DataFrame(table_data)
     df['price'] = pd.to_numeric(df['price'], downcast='float')
     df = df.groupby(by=['city', 'parse_date'])['price'].mean().to_frame()
-    telegram_bot_sendtext(df.to_string())
+    telegram_bot_sendtext(df.reset_index().to_markdown(index=False))
 
 
 if __name__ == '__main__':
