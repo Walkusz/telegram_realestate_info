@@ -34,6 +34,7 @@ def main():
 
     table_data = table.scan().get('Items', [])
     df = pd.DataFrame(table_data)
+    df['price'] = pd.to_numeric(df['price'], downcast='float')
     df = df.groupby(by=['city', 'parse_date'])['price'].mean().to_frame()
     telegram_bot_sendtext(df.to_string())
 
