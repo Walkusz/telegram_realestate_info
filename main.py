@@ -34,8 +34,10 @@ def main():
 
     table_data = table.scan().get('Items', [])
     df = pd.DataFrame(table_data)
+    df.sort_values(by='parse_date', ascending=False, inplace=True)
+    df = df[df['parse_date'] == df['parse_date'].max()]
     df['price'] = pd.to_numeric(df['price'], downcast='float')
-    df = df.groupby(by=['city', 'parse_date'])['price'].mean().to_frame()
+    df = df.groupby(by='city')['price'].mean().to_frame()
     telegram_bot_sendtext(df.reset_index().to_markdown(index=False))
 
 
