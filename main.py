@@ -34,11 +34,14 @@ def main():
 
     table_data = table.scan().get('Items', [])
     df = pd.DataFrame(table_data)
+    date_to_use = df['parse_date'].max()
     df.sort_values(by='parse_date', ascending=False, inplace=True)
-    df = df[df['parse_date'] == df['parse_date'].max()]
+    df = df[df['parse_date'] == date_to_use]
     df['price'] = pd.to_numeric(df['price'], downcast='float')
     df = df.groupby(by='city')['price'].mean().to_frame()
-    telegram_bot_sendtext(df.reset_index().to_markdown(index=False))
+    table_markdown = df.reset_index().to_markdown(index=False)
+    date_text = f'\nData as of: {date_to_use}'
+    telegram_bot_sendtext(table_markdown+date_text)
 
 
 if __name__ == '__main__':
