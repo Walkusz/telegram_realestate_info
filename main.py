@@ -8,6 +8,10 @@ import pandas as pd
 import os
 import requests
 from docopt import docopt
+from celery import Celery
+
+app = Celery('tasks', broker='pyamqp://guest@localhost//')
+
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWSAccessKeyId')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWSSecretKey')
@@ -19,6 +23,7 @@ TABLE_NAME = 'rynek_pierwotny'
 REGION_NAME = 'eu-north-1'
 
 
+@app.task
 def telegram_bot_sendtext(bot_message):
     send_text = BASE_STRING + '/sendMessage?chat_id=' + BOT_CHAT_ID + '&parse_mode=html&text=' + bot_message
     response = requests.get(send_text)
